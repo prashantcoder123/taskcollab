@@ -1,0 +1,16 @@
+const Activity = require("../models/Activity")
+
+// GET ACTIVITIES BY BOARD
+exports.getActivities = async (req, res) => {
+  try {
+    const { boardId } = req.params
+
+    const activities = await Activity.find({ board: boardId })
+      .populate("user", "name email")
+      .sort({ createdAt: -1 })
+
+    res.json(activities)
+  } catch (error) {
+    res.status(500).json({ message: "Server error" })
+  }
+}
